@@ -952,6 +952,12 @@ function showSubModal() {
   // لا نمنع التمرير لأن الصفحة خلفه مرئية
 }
 
+// ══════════════════════════════
+//  رابط Google Apps Script
+//  ضع رابط الـ Deployment هنا
+// ══════════════════════════════
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
 function submitSub() {
   const name  = document.getElementById('sub-name').value.trim();
   const phone = document.getElementById('sub-phone').value.trim();
@@ -965,6 +971,16 @@ function submitSub() {
   subs.push({ name, phone, date: now.toISOString() });
   saveSubs(subs);
   localStorage.setItem('alnufeishi_registered', '1');
+
+  // إرسال إلى Google Sheets
+  if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone })
+    }).catch(() => {});
+  }
 
   // إظهار رسالة النجاح
   document.getElementById('sub-form-section').style.display = 'none';
